@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request, session
-from flask_bcrypt import Bcrypt 
+
+from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from models import db, User, Employer
 
@@ -58,6 +59,23 @@ def signup():
     return response_body
     
 
+# Endpoint for employee signup
+@app.route('/EmployeeSignUp', methods=['POST'])
+def employee_signup():
+    # Get user data from the request
+    data = request.get_json()
+
+    # Extract data fields
+    first_name = data.get('firstName')
+    last_name = data.get('lastName')
+    email = data.get('email')
+    password = data.get('password')
+
+    # TODO: Implement registration logic here
+
+    # Example: Registration success response
+    response = {'success': True, 'message': 'Registration successful'}
+    return jsonify(response)
 
 @app.route('/login', methods=['POST'])
 def login_user():
