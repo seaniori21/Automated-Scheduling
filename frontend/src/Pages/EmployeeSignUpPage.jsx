@@ -1,6 +1,7 @@
 import React from 'react'
 
 import NavBar from '../Components/NavBar'
+import EmployeeSignUp from '../Components/EmployeeSignUp';
 
 function EmployeeSignUpPage() {
   return (

@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request, session
 
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
-from models import db, User, Employer
+from models import db, User, Employer, Employee
 
 app = Flask(__name__)
 
@@ -57,25 +57,61 @@ def signup():
     })  
 
     return response_body
-    
 
-# Endpoint for employee signup
+from flask_cors import cross_origin
+
+@app.route('/EmployeeConfirmation', methods=['POST'])
+@cross_origin()  # Enable CORS for this route
+def employee_confirmation():
+    # Get the data from the POST request
+    company_name = request.json["companyName"]
+    employer_email = request.json["employerEmail"]
+
+    # Check if the employer email exists in the Employer table
+    employer = Employer.query.filter_by(email=employer_email).first()
+
+    if employer is None:
+        # If the employer email doesn't exist, return an error response
+        return jsonify({"error": "Employer email not found"}), 400
+
+    # If the employer email exists,  returning a success response (temporary)
+    return jsonify({"message": f"Company: {company_name}, Employer: {employer.email} confirmed"}), 200
+
+
 @app.route('/EmployeeSignUp', methods=['POST'])
 def employee_signup():
-    # Get user data from the request
-    data = request.get_json()
+    firstname = request.json["firstname"]
+    lastname = request.json["lastname"]
+    email = request.json["email"]
+    password = request.json["password"]
 
-    # Extract data fields
-    first_name = data.get('firstName')
-    last_name = data.get('lastName')
-    email = data.get('email')
-    password = data.get('password')
+    # Check if the user already exists
+    user_exists = User.query.filter_by(email=email).first() is not None
 
-    # TODO: Implement registration logic here
+    if user_exists:
+        return jsonify({"Error": "Email already exists"}), 409
 
-    # Example: Registration success response
-    response = {'success': True, 'message': 'Registration successful'}
-    return jsonify(response)
+    # Hash the password and create a new Employee instance
+    hashed_password = bcrypt.generate_password_hash(password)
+    new_user = Employee(email=email, password=hashed_password, firstname=firstname, lastname=lastname)
+
+    # Add to both User and Employee tables
+    db.session.add(User(email=new_user.email, password=hashed_password, id=new_user.id))
+    db.session.add(new_user)
+    db.session.commit()
+
+    session['user_id'] = new_user.id
+
+    response_body = jsonify({
+        "id": new_user.id,
+        "email": new_user.email,
+        "Name": new_user.firstname + " " + new_user.lastname,
+
+        # Include other employee-specific data in the response
+    })
+
+    return response_body
+
 
 @app.route('/login', methods=['POST'])
 def login_user():
