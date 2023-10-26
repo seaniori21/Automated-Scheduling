@@ -6,7 +6,8 @@ import EmployerSignUp from './Pages/EmployerSignUp';
 import LoginPage from './Pages/LoginPage';
 import EmployeeConfirmation from './Pages/EmployeeConfirmation';
 import EmployeeSignUpPage from './Pages/EmployeeSignUpPage';
-
+import EmployerHomePage from './Pages/EmployerHomePage'; // Import EmployerHomePage
+import EmployeeHomePage from './Pages/EmployeeHomePage';
 
 import {BrowserRouter, Routes, Route} from  "react-router-dom";
 
@@ -25,6 +26,8 @@ function App() {
         <Route path="/EmployerSignUp" element={<EmployerSignUp/>}/>
         <Route path="/EmployeeConfirmation" element={<EmployeeConfirmation/>}/>
         <Route path="/EmployeeSignUpPage" element={<EmployeeSignUpPage/>}/>
+        <Route path="/EmployerHomePage" element={<EmployerHomePage />} />
+        <Route path="/EmployeeHomePage" element={<EmployeeHomePage />} />
 
       </Routes>      
       
