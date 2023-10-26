@@ -136,4 +136,5 @@ def login_user():
     return response_body
 
 if __name__ == '__main__':
+    print(app)
     app.run(debug=True)
