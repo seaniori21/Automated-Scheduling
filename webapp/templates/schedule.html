@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Schedule</title>
+</head>
+<body>
+    <h1>Schedule</h1>
+    {% for day_info in schedule %}
+        <h2>Day {{ day_info['day'] }}</h2>
+        {% for shift_info in day_info['shifts'] %}
+            <p>{{ shift_info['shift_name'] }}: {{ shift_info['employees']|join(', ') }}</p>
+        {% endfor %}
+    {% endfor %}
+
+    <h2>Total Shifts per Employee</h2>
+    {% for employee_info in total_shifts %}
+        <p>Total shifts for {{ employee_info['employee_name'] }}: {{ employee_info['total_shifts'] }}</p>
+    {% endfor %}
+
+        <!-- Button to go back to shift requirements management -->
+        <form action="{{ url_for('requirements.manage_requirements') }}" method="get">
+            <button type="submit">Back to Shift Requirements</button>
+        </form>
+    
+</body>
+</html>
