@@ -1,13 +1,17 @@
 import React, {useState} from 'react'
 import axios from 'axios'
+import setToken from './useToken'
 import { useNavigate } from 'react-router-dom';
+import {login} from './Auth'
 
-function Login() {
+function Login(props) {
+
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('')
 
-  const navigate = useNavigate();
+  
 
   const logInUser = () => {
     if(email.length === 0) {
@@ -17,22 +21,27 @@ function Login() {
       alert("Password has been left blank")
     }
     else{
-      axios.post('http://127.0.0.1:5000/login', {
+      axios.post('http://127.0.0.1:5000/token', {
         email: email,
         password: password
       })
       .then(function (response) {
-        console.log(response);
+        
         if (response.status === 200){
+          console.log(response.data.access_token);
+          login(response.data.access_token)
+          props.setToken(response.data.access_token)
+          navigate("/Home")
           alert("Success")
-          navigate("/")
+          
         }
-        //console.log(response.data)
       })
       .catch(function (error) {
         console.log(error, 'error');
-        if (error.response.status === 401){
-          alert("Invalid credentials")
+        if (error.response) {
+          console.log(error.response)
+          console.log(error.response.status)
+          console.log(error.response.headers)
         }
       });
     }
