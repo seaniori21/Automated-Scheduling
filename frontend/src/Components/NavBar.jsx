@@ -38,7 +38,7 @@ function NavBar(props) {
                 <a class="nav-link active" aria-current="page" href="/Home">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/test">Test</a>
+                <a class="nav-link active" aria-current="page" href="/test">Profile</a>
               </li>
           </>
       )
