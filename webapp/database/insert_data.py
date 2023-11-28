@@ -105,6 +105,9 @@ class SchedulingDB:
     def delete_shift_preference(self, employee_id, day):
         self.cursor.execute("DELETE FROM ShiftPreferences WHERE employee_id = ? AND day = ?", (employee_id, day))
         self.conn.commit()
+    def delete_all_shift(self, employee_id):
+        self.cursor.execute("DELETE FROM ShiftPreferences WHERE employee_id = ?", (employee_id,))
+        self.conn.commit()
     
     # Seniority Data
     def insert_seniority(self, employee_id, score):
@@ -129,8 +132,11 @@ def main():
     db = SchedulingDB('scheduling.db')
 
     # Sample operations
-    #db.password_employee("Dani Bricelonita", "Dani")
-    db.new_employee("test1","test1")
+    #db.password_employee("Ramon Ombrellino", "Ramon")
+    # db.new_employee("test1","test1")
+    #db.update_seniority(18,1)
+    #db.insert_seniority(18,1)
+
     db.close()
 
 if __name__ == "__main__":

@@ -40,15 +40,6 @@ function App() {
               <Route path="/test" element={<Test/>} exact />
           </>
       )}
-
-        {/* <Route path="/" element={<Header/>}/>
-        <Route path="/Home" element={<ProtectedRoute> <Home /> </ProtectedRoute>} />
-        <Route path="/Header" element={<Header/>}/>
-        <Route path="/Login" element={<Login/>}/>
-        <Route path="/EmployerSignUp" element={<EmployerSignUp/>}/>
-        <Route path="/EmployeeConfirmation" element={<EmployeeConfirmation/>}/>
-        <Route path="/EmployeeSignUp" element={<EmployeeSignUp/>}/>
-        <Route path="/test" element={<Test/>}/> */}
       
       </Routes>
       

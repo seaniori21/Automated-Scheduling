@@ -30,6 +30,59 @@ app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 jwt = JWTManager(app)
 
 
+@app.route('/editDaysOff', methods=["POST"])
+def editDaysOff():
+    ID = request.json.get("ID", None)
+    offDays = request.json.get("UnavailableDays", None)
+
+    # conn = get_db_connection()
+
+    # cur = conn.cursor()
+    # cur.execute("Select * FROM ShiftPreferences WHERE employee_id = ? AND day = ?", (ID, shiftDay))
+    # existDay = cur.fetchone()
+    
+    # #find if shiftday exists and if it does, delete it and put whatever he wants in
+    # if existDay:
+    #     cur.execute("DELETE FROM ShiftPreferences WHERE employee_id = ? AND day = ?", (ID, shiftDay))
+    #     conn.commit()
+    #     return {"msg": "Shift Already Exists"}
+    # else:
+    #     cur.execute("INSERT INTO ShiftPreferences (employee_id, day, preference) VALUES (?, ?, ?)", (ID, shiftDay, shiftJob))
+    #     conn.commit()
+    #     return {"msg": "Shift Has Been Updated"}
+
+    db = SchedulingDB('scheduling.db')
+    db.delete_unavailable_days(ID,offDays)
+    db.insert_unavailable_days(ID,offDays)
+    db.close()
+
+    return {"MSG":"Your Unavailable Days Have Been Updated"}
+
+
+@app.route('/editShifts', methods=["POST"])
+def editShifts():
+    ID = request.json.get("ID", None)
+    shiftDay = request.json.get("ShiftDay", None)
+    shiftJob = request.json.get("ShiftJob", None)
+
+    conn = get_db_connection()
+
+    cur = conn.cursor()
+    cur.execute("Select * FROM ShiftPreferences WHERE employee_id = ? AND day = ?", (ID, shiftDay))
+    existDay = cur.fetchone()
+    
+    #find if shiftday exists and if it does, delete it and put whatever he wants in
+    if existDay:
+        cur.execute("DELETE FROM ShiftPreferences WHERE employee_id = ? AND day = ?", (ID, shiftDay))
+        conn.commit()
+        return {"msg": "Shift Already Exists"}
+    else:
+        cur.execute("INSERT INTO ShiftPreferences (employee_id, day, preference) VALUES (?, ?, ?)", (ID, shiftDay, shiftJob))
+        conn.commit()
+        return {"msg": "Shift Has Been Updated"}
+    
+
+
 # routes
 @app.route('/test', methods=['GET', 'POST'])
 @jwt_required()
@@ -41,9 +94,35 @@ def test():
     cur.execute("SELECT * FROM Employees WHERE id = ?", (id,))
     userId = cur.fetchone()
 
+    cur.execute("SELECT * FROM ShiftPreferences WHERE employee_id = ?", (id,))
+    userShiftPreferences = cur.fetchone()
+    if userShiftPreferences == None:
+        userShiftPreferences =["None","None","None"]
+
+
+    cur.execute("SELECT * FROM UnavailableDays WHERE employee_id = ?", (id,))
+    userUnavailableDays = cur.fetchall()
+    UnavailableDays = []
+    if userUnavailableDays is not None:
+        for column in userUnavailableDays:
+            id_val, day = column
+            UnavailableDays.append(day)
+    else:
+        UnavailableDays.append("None")
+
+    # Mapping of numbers to days
+    day_mapping = {1: 'Sunday ', 2: 'Monday ', 3: 'Tuesday ', 
+                   4: 'Wednesday ', 5: 'Thursday ', 6: 'Friday ', 7: 'Saturday ',
+    }
+    offDays = [day_mapping[number] for number in UnavailableDays]
+    
+
     return jsonify({
         'ID': userId[0],
-        'Name': userId[1]
+        'Name': userId[1],
+        'Preferred_Shift_Day': userShiftPreferences[1],
+        "Shift_Preference": userShiftPreferences[2],
+        "UnavailableDays": offDays
     })
 
 @app.route('/token', methods=["POST"])
