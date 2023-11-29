@@ -55,21 +55,30 @@ def editShifts():
     db.close()
 
     conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT id,name FROM Shifts")
+    shifts = cur.fetchall()
+    # Create a dictionary to map IDs to names
+    shifts_map = {id: name for name, id in shifts}
+    shifts_map["None"] = -1
+    shifts_map[""] = -1
+    
 
     cur = conn.cursor()
     for Job in Shifts:
         Day += 1
+        temp = shifts_map.get(Job)
         
         #If no shift preference is given, ignore
-        if Job == -1:
+        if temp == -1:
             continue
         else:
-            cur.execute("INSERT INTO ShiftPreferences (employee_id, day, preference) VALUES (?, ?, ?)", (ID, Day, Job))
+            cur.execute("INSERT INTO ShiftPreferences (employee_id, day, preference) VALUES (?, ?, ?)", (ID, Day, temp))
             conn.commit()
         
     conn.close()
 
-    return {"msg": "Shifts Successfully Updated"}
+    return {"msg": shifts_map}
 
 
 # routes

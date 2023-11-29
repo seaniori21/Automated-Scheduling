@@ -46,6 +46,9 @@ function App() {
       )}
       
       </Routes>
+      <footer class="py-5 bg-dark">
+      <div class="footer"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p></div>
+    </footer>
       
       
       

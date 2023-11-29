@@ -12,15 +12,16 @@ function EditShifts(props) {
   const location = useLocation();
   const token = getToken()
 
-
-  const [ID, setID] = useState('');
-  const [ShiftJob, setJob] = useState('')
-  const [ShiftDay, setDay] = useState('')
-  const [Shifts, setShifts] = useState('')
-  const [age, setAge] = useState('');
+  const [ShiftsList, setShiftsList] = useState('')
 
   const shiftNames = location.state.data
   console.log("ShiftNames",shiftNames)
+
+  const shiftMap = {};
+  shiftNames.forEach((shift, index) => {
+    shiftMap[shift] = index;
+  });
+  console.log("ShiftMap",shiftMap)
 
 
   const [state, setState] = useState({
@@ -41,6 +42,10 @@ function EditShifts(props) {
       [event.target.name]: event.target.value,
   });
   };
+  console.log("STATES", state)
+
+  const shiftValuesArray = Object.values(state);
+  console.log("SHIFT VALUES", shiftValuesArray)
 
   const changeShifts = () => {
     if(0 != 0) {
@@ -48,7 +53,7 @@ function EditShifts(props) {
     }
     else{
         axios.post('http://127.0.0.1:5000/editShifts', {
-        "Shifts": [1,2,3,4,5,6,7]
+        "Shifts": shiftValuesArray
         }
         ,{
         headers: {
