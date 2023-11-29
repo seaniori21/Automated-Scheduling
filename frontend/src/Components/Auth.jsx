@@ -10,3 +10,10 @@ export const {useAuth, authFetch, login, logout} =
         })
         .then(r => r.json())
     })
+
+export const getTokens = async () => {
+    const userToken = localStorage.getItem('token');
+    return userToken && userToken
+};
+
+

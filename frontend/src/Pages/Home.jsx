@@ -4,6 +4,7 @@ import Header from '../Components/Header.jsx';
 
 
 function Home() {
+
   return (
     <div>
         <section class="vh-100 gradient-custom">
