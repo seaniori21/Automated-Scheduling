@@ -10866,3 +10866,20 @@ textarea.form-control-lg {
   width: 4rem;
   font-size: 2rem;
 }
+
+.Scheduler{
+
+  margin-top: 80px;
+ 
+}
+.schedule{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); 
+  color: white;
+}
+
+.schedHead{
+  z-index: 100;
+}

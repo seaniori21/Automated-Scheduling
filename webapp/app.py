@@ -1,4 +1,6 @@
 import os
+from base import Scheduler
+from base import getSched
 from flask import Flask, json, jsonify, make_response, render_template, request
 from blueprints.employees_blueprint import employees
 from blueprints.shifts_blueprint import shifts
@@ -230,6 +232,14 @@ def logout():
     response = jsonify({"msg": "logout successful"})
     unset_jwt_cookies(response)
     return response
+
+@app.route('/Schedule', methods=['GET'])
+def Schedule():
+   response = jsonify(getSched())
+   return response
+
+  
+
 
 
 @app.after_request
