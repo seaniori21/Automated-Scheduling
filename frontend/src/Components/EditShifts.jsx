@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import getToken from './useToken.jsx';
 import {useAuth} from './Auth.jsx';
 import UnavailableDays from "./UnavailableDays.jsx";
+import EditOffDays from "./EditOffDays.jsx";
 
 function EditShifts() {
     const navigate = useNavigate();
@@ -72,6 +73,9 @@ function EditShifts() {
             </div>
 
 
+          </div>
+          <div>
+            <EditOffDays />
           </div>
         </div>
       </div>

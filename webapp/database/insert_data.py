@@ -90,9 +90,8 @@ class SchedulingDB:
         for day in days:
                 self.cursor.execute("INSERT INTO UnavailableDays (employee_id, day) VALUES (?, ?)", (employee_id, day))
         self.conn.commit()
-    def delete_unavailable_days(self, employee_id, days):
-        for day in days:
-            self.cursor.execute("DELETE FROM UnavailableDays WHERE employee_id = ? AND day = ?", (employee_id, day))
+    def delete_unavailable_days(self, employee_id):
+        self.cursor.execute("DELETE FROM UnavailableDays WHERE employee_id = ?", (employee_id,))
         self.conn.commit()
     
     # Shift Preferences Data

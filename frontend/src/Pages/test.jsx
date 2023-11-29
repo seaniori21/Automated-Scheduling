@@ -3,9 +3,13 @@ import getToken from '../Components/useToken.jsx';
 import {getTokens, useAuth} from '../Components/Auth.jsx';
 import axios from "axios";
 import UnavailableDays from "../Components/UnavailableDays.jsx";
+import EditOffDays from "../Components/EditOffDays.jsx";
+import { useNavigate } from 'react-router-dom';
 
 const Test = () => {
     const [data, setData] = useState([]);
+    const [isButtonClicked, setIsButtonClicked] = useState(false);
+    const navigate = useNavigate()
 
     const token = getToken()
     // const userUseAuth = useAu()
@@ -29,30 +33,26 @@ const Test = () => {
       })
   }, [])
     
-
-
-    
-    ////
-    const posts = [
-      {id:1,  Day: 'Hello World', Job: 'Welcome to learning React!'},
-      {id:2, Day: 'Installation', Job: 'You can install React from npm.'}
-    ]
-    console.log("Posts", posts)
-
-
     const shifts = data.Shifts
-    console.log("Shifts", shifts)
+    // console.log("Shifts", shifts)
 
     // Check if shifts is not null before mapping
     const content = shifts ? (
-      shifts.map((post) => (
-        <div key={post.id}>
-          <p>{post.Day}: {post.Job}</p>
+      shifts.map((shift) => (
+        <div key={shift.id}>
+          <p>{shift.Day}: {shift.Job}</p>
         </div>
       ))
     ) : (
       <p>Loading shifts...</p>
     );
+
+    const DisplayEditOffDays = () => {
+      // Set the state to true when the button is clicked
+
+      setIsButtonClicked(true);
+      navigate("/editdaysoff")
+    };
     
 
     return ( 
@@ -84,6 +84,10 @@ const Test = () => {
 
             <div class="mb-md-1 ">
                 <UnavailableDays data={data} />
+
+                <div>
+                  <button class="btn btn-outline-light btn-xs px-5" onClick={DisplayEditOffDays}>Change Your Availability</button>
+                </div>
             </div>
 
           </div>

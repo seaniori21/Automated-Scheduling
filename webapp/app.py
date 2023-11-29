@@ -31,21 +31,26 @@ jwt = JWTManager(app)
 
 
 @app.route('/editDaysOff', methods=["POST"])
+@jwt_required()
 def editDaysOff():
-    ID = request.json.get("ID", None)
+    ID = get_jwt_identity() # Filter DB by token (email)
+    # ID = request.json.get("ID", None)
     offDays = request.json.get("UnavailableDays", None)
 
+    print(ID)
+
     db = SchedulingDB('scheduling.db')
-    db.delete_unavailable_days(ID,offDays)
+    db.delete_unavailable_days(ID)
     db.insert_unavailable_days(ID,offDays)
     db.close()
 
-    return {"MSG":"Your Unavailable Days Have Been Updated"}
+    return {"MSG":"Your Unavailable Days Have Been Updated"},200
 
 
 @app.route('/editShifts', methods=["POST"])
+@jwt_required()
 def editShifts():
-    ID = request.json.get("ID", None)
+    ID = get_jwt_identity() # Filter DB by token (email)
     Shifts = request.json.get("Shifts", None)
 
     for Day,Job in Shifts.items():
@@ -79,7 +84,7 @@ def test():
     }
 
     id = get_jwt_identity() # Filter DB by token (email)
-    print()
+
 
     conn = get_db_connection()
     cur = conn.cursor()
