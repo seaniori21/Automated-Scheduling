@@ -60,7 +60,6 @@ class SchedulingDB:
     def insert_employee(self, name):
         self.cursor.execute("INSERT INTO Employees (name) VALUES (?)", (name,))
         self.conn.commit()
-
     def new_employee(self, name,password):
         self.cursor.execute("INSERT INTO Employees (name, password) VALUES (? , ?)", (name,password))
         self.conn.commit()
