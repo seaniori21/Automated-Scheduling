@@ -1,11 +1,13 @@
 import React from 'react'
 
 function UnavailableDays(daysOff) {
-    console.log("HERE", daysOff)
   return (
-    <p class="fw-bold mb-2 text-uppercase">
-        Unavailable Days: {daysOff.data.UnavailableDays}
-    </p>
+    <div>
+      <h4 class="fw-bold mb-2 text-uppercase">Unavailable Days</h4>
+      <p class="fw-bold mb-2 ">
+          {daysOff.data.UnavailableDays}
+      </p>
+    </div>
   )
 }
 
