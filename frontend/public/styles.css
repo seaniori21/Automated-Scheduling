@@ -10866,19 +10866,46 @@ textarea.form-control-lg {
   font-size: 2rem;
 }
 
-.Scheduler{
 
-  margin-top: 80px;
- 
-}
 .schedule{
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%); 
   color: white;
+  width: 80%; 
+  border-top: 3px solid black; 
+  border-bottom: 3px solid black;
+  border-left: 3px solid black;
+  border-right: 3px solid black;
+  
 }
 
-.schedHead{
-  z-index: 100;
+.trschedHead{
+ 
+  
+}
+
+.trSchedBody{
+  border-top: 3px solid black; 
+  border-bottom: 3px solid black;
+  
+ 
+ 
+}
+
+.th{
+  border-bottom: 3px solid black;
+  border-left: 3px solid black;
+  border-right: 3px solid black;
+}
+
+.tdSchedDays{
+  font-weight: bold;
+  border-left: 3px solid black;
+  border-right: 3px solid black;
+}
+.tdSchedNames{
+  border-left: 3px solid black;
+  border-right: 3px solid black;
 }

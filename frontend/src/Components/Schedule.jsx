@@ -75,7 +75,6 @@ function Schedule(props) {
 
   return (
     <div className="Scheduler">
-      <h1>Weekly Schedule</h1>
       <table className="schedule">
         <thead className="schedHead">
           <tr className="trSchedHead">
