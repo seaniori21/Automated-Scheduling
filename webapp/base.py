@@ -173,6 +173,21 @@ def get_input_data():
     return employee_names, shift_names, {'unavailable_days': unavailable_days, 'shift_preferences': shift_preferences}, seniority, shift_requirements
 
 
+
+def getSched():
+    employee_data, shift_data, preferences, seniority, shift_requirements = get_input_data()
+    scheduler = Scheduler(employee_data, shift_data, preferences, seniority, shift_requirements)
+    schedule, total_shifts_per_employee = scheduler.generate_schedule()
+
+    return schedule
+    
+
+
+
+
+
+
+
 def main():
     employee_data, shift_data, preferences, seniority, shift_requirements = get_input_data()
     scheduler = Scheduler(employee_data, shift_data, preferences, seniority, shift_requirements)
