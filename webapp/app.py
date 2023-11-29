@@ -29,6 +29,77 @@ app.config["JWT_SECRET_KEY"] = "please-remember-to-change-me"
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 jwt = JWTManager(app)
 
+'''
+Overview: we are going to send and pull all 7 days per request
+    - Each request will have a day and what shift they want, allowing blank values
+    - Each request will delete all employee shift preferences db and then push all new ones
+Plan::
+    - We need to create a backend GET API that sends the list of shift preferences NAMES to display on frontend
+    - We need a backend API POST that takes in all 7 days with each respective SHift
+    - After recieving POST data we edit data to delete blank anwsers
+    - We delete all previous employee ShiftPreferences data then update with new ones
+    - 
+'''
+@app.route('/editShifts', methods=["POST"])
+@jwt_required()
+def editShifts():
+    ID = get_jwt_identity() # Filter DB by token (email)
+    # ID = request.json.get("ID", None)
+    Shifts = request.json.get("Shifts", None)
+
+    Day = 0
+
+    #Delete previous shifts data
+    db = SchedulingDB('scheduling.db')
+    db.delete_all_shift(ID)
+    db.close()
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT id,name FROM Shifts")
+    shifts = cur.fetchall()
+    # Create a dictionary to map IDs to names
+    shifts_map = {id: name for name, id in shifts}
+    shifts_map["None"] = -1
+    shifts_map[""] = -1
+    
+
+    cur = conn.cursor()
+    for Job in Shifts:
+        Day += 1
+        temp = shifts_map.get(Job)
+        
+        #If no shift preference is given, ignore
+        if temp == -1:
+            continue
+        else:
+            cur.execute("INSERT INTO ShiftPreferences (employee_id, day, preference) VALUES (?, ?, ?)", (ID, Day, temp))
+            conn.commit()
+        
+    conn.close()
+
+    return {"msg": shifts_map}
+
+
+# routes
+@app.route('/getShiftNames', methods=['GET'])
+def getShiftNames():
+
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT name FROM Shifts")
+    shifts = cur.fetchall()
+
+    shiftsNames = [name[0] for name in shifts] 
+    shiftsNames.append("None")
+    conn.close()
+
+    return jsonify({
+        'Shifts': shiftsNames
+    })
+
+
 
 @app.route('/editDaysOff', methods=["POST"])
 @jwt_required()
@@ -47,40 +118,13 @@ def editDaysOff():
     return {"MSG":"Your Unavailable Days Have Been Updated"},200
 
 
-@app.route('/editShifts', methods=["POST"])
-@jwt_required()
-def editShifts():
-    ID = get_jwt_identity() # Filter DB by token (email)
-    Shifts = request.json.get("Shifts", None)
-
-    for Day,Job in Shifts.items():
-        conn = get_db_connection()
-
-        cur = conn.cursor()
-        cur.execute("Select * FROM ShiftPreferences WHERE employee_id = ? AND day = ?", (ID, Day))
-        existDay = cur.fetchone()
-        
-        #find if shiftday exists and if it does, delete it and put whatever he wants in
-        if existDay:
-            cur.execute("DELETE FROM ShiftPreferences WHERE employee_id = ? AND day = ?", (ID, Day))
-            conn.commit()
-        else:
-            cur.execute("INSERT INTO ShiftPreferences (employee_id, day, preference) VALUES (?, ?, ?)", (ID, Day, Job))
-            conn.commit()
-        
-    conn.close()
-
-        
-    return {"msg": "Shifts Successfully Updated"}
-
-
 # routes
 @app.route('/test', methods=['GET'])
 @jwt_required()
 def test():
 
-    day_mapping = {1: 'Sunday ', 2: 'Monday ', 3: 'Tuesday ', 
-                   4: 'Wednesday ', 5: 'Thursday ', 6: 'Friday ', 7: 'Saturday ',
+    day_mapping = {7: 'Sunday ', 1: 'Monday ', 2: 'Tuesday ', 
+                   3: 'Wednesday ', 4: 'Thursday ', 5: 'Friday ', 6: 'Saturday ',
     }
 
     id = get_jwt_identity() # Filter DB by token (email)
@@ -120,7 +164,7 @@ def test():
             id_val, day = column
             UnavailableDays.append(day)
     else:
-        UnavailableDays.append("None")
+        UnavailableDays.append("No Preference")
 
     # Mapping of numbers to days
     offDays = [day_mapping[number] for number in UnavailableDays]

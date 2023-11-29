@@ -15,7 +15,7 @@ import {Routes, Route} from  "react-router-dom";
 import useToken from './Components/useToken'
 import {useAuth} from './Components/Auth'
 import Profile from './Components/Profile';
-import EditProfile from './Components/EditShifts.jsx';
+import EditShifts from './Components/EditShifts.jsx';
 import EditOffDays from './Components/EditOffDays.jsx';
 
 
@@ -40,12 +40,15 @@ function App() {
               <Route path="/Home" element={<Home/>} exact />
               <Route path="/" element={<Home/>} exact />
               <Route path="/test" element={<Test/>} exact />
-              <Route path="/EditProfile" element={<EditProfile/>} />
+              <Route path="/EditShifts" element={<EditShifts/>} />
               <Route path="/editdaysoff" element={<EditOffDays/>} />
           </>
       )}
       
       </Routes>
+      <footer class="py-5 bg-dark">
+      <div class="footer"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p></div>
+    </footer>
       
       
       

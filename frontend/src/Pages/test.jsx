@@ -4,7 +4,7 @@ import {getTokens, useAuth} from '../Components/Auth.jsx';
 import axios from "axios";
 import UnavailableDays from "../Components/UnavailableDays.jsx";
 import EditOffDays from "../Components/EditOffDays.jsx";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 
 const Test = () => {
     const [data, setData] = useState([]);
@@ -32,10 +32,8 @@ const Test = () => {
           console.log("Profile ERROR:",err)
       })
   }, [])
-    
-    const shifts = data.Shifts
-    // console.log("Shifts", shifts)
 
+    const shifts = data.Shifts
     // Check if shifts is not null before mapping
     const content = shifts ? (
       shifts.map((shift) => (
@@ -52,6 +50,31 @@ const Test = () => {
 
       setIsButtonClicked(true);
       navigate("/editdaysoff")
+    };
+
+    const editShifts = () => {
+      axios({
+        method: "GET",
+        url:"/getShiftNames",
+        headers: {
+          Authorization: 'Bearer ' + token.token
+        }
+      })
+      .then((response) => {
+        const data = response.data.Shifts
+        navigate('/EditShifts', { state:{data} });
+      }).catch((error) => {
+        if (error.response) {
+          console.log(error.response)
+          console.log(error.response.status)
+          console.log(error.response.headers)
+          }
+      })
+    }
+
+    const displayEditShifts = () => {
+        editShifts()
+      
     };
     
 
@@ -78,6 +101,10 @@ const Test = () => {
             <div class="mb-md-1 mt-md-1 pb-1">
             <h4 class="fw-bold mb-2 text-uppercase">Shift Preferences</h4>
               {content}
+            </div>
+
+            <div>
+                  <button class="btn btn-outline-light btn-xs px-5" onClick={displayEditShifts}>Get Shift Names</button>
             </div>
 
             <hr />
