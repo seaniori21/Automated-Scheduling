@@ -31,75 +31,131 @@ app.config["JWT_SECRET_KEY"] = "please-remember-to-change-me"
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 jwt = JWTManager(app)
 
+'''
+Overview: we are going to send and pull all 7 days per request
+    - Each request will have a day and what shift they want, allowing blank values
+    - Each request will delete all employee shift preferences db and then push all new ones
+Plan::
+    - We need to create a backend GET API that sends the list of shift preferences NAMES to display on frontend
+    - We need a backend API POST that takes in all 7 days with each respective SHift
+    - After recieving POST data we edit data to delete blank anwsers
+    - We delete all previous employee ShiftPreferences data then update with new ones
+    - 
+'''
+@app.route('/editShifts', methods=["POST"])
+@jwt_required()
+def editShifts():
+    ID = get_jwt_identity() # Filter DB by token (email)
+    # ID = request.json.get("ID", None)
+    Shifts = request.json.get("Shifts", None)
 
-@app.route('/editDaysOff', methods=["POST"])
-def editDaysOff():
-    ID = request.json.get("ID", None)
-    offDays = request.json.get("UnavailableDays", None)
+    Day = 0
 
-    # conn = get_db_connection()
-
-    # cur = conn.cursor()
-    # cur.execute("Select * FROM ShiftPreferences WHERE employee_id = ? AND day = ?", (ID, shiftDay))
-    # existDay = cur.fetchone()
-    
-    # #find if shiftday exists and if it does, delete it and put whatever he wants in
-    # if existDay:
-    #     cur.execute("DELETE FROM ShiftPreferences WHERE employee_id = ? AND day = ?", (ID, shiftDay))
-    #     conn.commit()
-    #     return {"msg": "Shift Already Exists"}
-    # else:
-    #     cur.execute("INSERT INTO ShiftPreferences (employee_id, day, preference) VALUES (?, ?, ?)", (ID, shiftDay, shiftJob))
-    #     conn.commit()
-    #     return {"msg": "Shift Has Been Updated"}
-
+    #Delete previous shifts data
     db = SchedulingDB('scheduling.db')
-    db.delete_unavailable_days(ID,offDays)
-    db.insert_unavailable_days(ID,offDays)
+    db.delete_all_shift(ID)
     db.close()
 
-    return {"MSG":"Your Unavailable Days Have Been Updated"}
-
-
-@app.route('/editShifts', methods=["POST"])
-def editShifts():
-    ID = request.json.get("ID", None)
-    shiftDay = request.json.get("ShiftDay", None)
-    shiftJob = request.json.get("ShiftJob", None)
-
     conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT id,name FROM Shifts")
+    shifts = cur.fetchall()
+    # Create a dictionary to map IDs to names
+    shifts_map = {id: name for name, id in shifts}
+    shifts_map["None"] = -1
+    shifts_map[""] = -1
+    
 
     cur = conn.cursor()
-    cur.execute("Select * FROM ShiftPreferences WHERE employee_id = ? AND day = ?", (ID, shiftDay))
-    existDay = cur.fetchone()
-    
-    #find if shiftday exists and if it does, delete it and put whatever he wants in
-    if existDay:
-        cur.execute("DELETE FROM ShiftPreferences WHERE employee_id = ? AND day = ?", (ID, shiftDay))
-        conn.commit()
-        return {"msg": "Shift Already Exists"}
-    else:
-        cur.execute("INSERT INTO ShiftPreferences (employee_id, day, preference) VALUES (?, ?, ?)", (ID, shiftDay, shiftJob))
-        conn.commit()
-        return {"msg": "Shift Has Been Updated"}
-    
+    for Job in Shifts:
+        Day += 1
+        temp = shifts_map.get(Job)
+        
+        #If no shift preference is given, ignore
+        if temp == -1:
+            continue
+        else:
+            cur.execute("INSERT INTO ShiftPreferences (employee_id, day, preference) VALUES (?, ?, ?)", (ID, Day, temp))
+            conn.commit()
+        
+    conn.close()
+
+    return {"msg": shifts_map}
 
 
 # routes
-@app.route('/test', methods=['GET', 'POST'])
-@jwt_required()
-def test():
-    id = get_jwt_identity() # Filter DB by token (email)
+@app.route('/getShiftNames', methods=['GET'])
+def getShiftNames():
+
 
     conn = get_db_connection()
     cur = conn.cursor()
+    cur.execute("SELECT name FROM Shifts")
+    shifts = cur.fetchall()
+
+    shiftsNames = [name[0] for name in shifts] 
+    shiftsNames.append("None")
+    conn.close()
+
+    return jsonify({
+        'Shifts': shiftsNames
+    })
+
+
+
+@app.route('/editDaysOff', methods=["POST"])
+@jwt_required()
+def editDaysOff():
+    ID = get_jwt_identity() # Filter DB by token (email)
+    # ID = request.json.get("ID", None)
+    offDays = request.json.get("UnavailableDays", None)
+
+    print(ID)
+
+    db = SchedulingDB('scheduling.db')
+    db.delete_unavailable_days(ID)
+    db.insert_unavailable_days(ID,offDays)
+    db.close()
+
+    return {"MSG":"Your Unavailable Days Have Been Updated"},200
+
+
+# routes
+@app.route('/test', methods=['GET'])
+@jwt_required()
+def test():
+
+    day_mapping = {7: 'Sunday ', 1: 'Monday ', 2: 'Tuesday ', 
+                   3: 'Wednesday ', 4: 'Thursday ', 5: 'Friday ', 6: 'Saturday ',
+    }
+
+    id = get_jwt_identity() # Filter DB by token (email)
+
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT id, name FROM Shifts")
+    ShiftsNames = cur.fetchall()
+    ShiftsNames_map = {id: name for id, name in ShiftsNames}  
+
     cur.execute("SELECT * FROM Employees WHERE id = ?", (id,))
     userId = cur.fetchone()
 
     cur.execute("SELECT * FROM ShiftPreferences WHERE employee_id = ?", (id,))
-    userShiftPreferences = cur.fetchone()
-    if userShiftPreferences == None:
-        userShiftPreferences =["None","None","None"]
+    userShiftPreferences = cur.fetchall()
+    
+    shiftsList= []
+    if userShiftPreferences is not None:
+        for column in userShiftPreferences:
+            id_val, day, job = column
+            Shifts = {}
+            Shifts["Day"] = day_mapping[day]
+            Shifts["Job"] = ShiftsNames_map[job]
+            shiftsList.append(Shifts)
+
+    else:
+        Shifts["None"] = "None"
+        shiftsList.append(Shifts)
 
 
     cur.execute("SELECT * FROM UnavailableDays WHERE employee_id = ?", (id,))
@@ -110,20 +166,17 @@ def test():
             id_val, day = column
             UnavailableDays.append(day)
     else:
-        UnavailableDays.append("None")
+        UnavailableDays.append("No Preference")
 
     # Mapping of numbers to days
-    day_mapping = {1: 'Sunday ', 2: 'Monday ', 3: 'Tuesday ', 
-                   4: 'Wednesday ', 5: 'Thursday ', 6: 'Friday ', 7: 'Saturday ',
-    }
     offDays = [day_mapping[number] for number in UnavailableDays]
     
+    conn.close()
 
     return jsonify({
         'ID': userId[0],
         'Name': userId[1],
-        'Preferred_Shift_Day': userShiftPreferences[1],
-        "Shift_Preference": userShiftPreferences[2],
+        'Shifts': shiftsList,
         "UnavailableDays": offDays
     })
 
@@ -136,7 +189,7 @@ def create_token():
     cur = conn.cursor()
     cur.execute("SELECT * FROM Employees WHERE name = ?", (email,))
     user = cur.fetchone()
-
+    conn.close()
 
     print(user[1],user[2])
     if email != user[1] or password != user[2]:
@@ -162,6 +215,7 @@ def create_user():
     cur = conn.cursor()
     cur.execute("SELECT * FROM Employees WHERE name = ?", (email,))
     user = cur.fetchone()
+    conn.close()
 
     if user:
         return {"msg": "Email Already Exists"}, 401

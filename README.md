@@ -8,11 +8,11 @@ HOW TO RUN:
 5. IN THE TERMINAL RUN npm run start 
 
 User Stories:
-    - Ability to sign up and login for Employers (check)**
-    - Employers can register their employees
-    - Employees can then sign in by their email 
-    - Employers can make a schedule with number of shifts and dates
-    - Employees can send their preferred shifts
+1. Ability to sign up and login for Employees
+2. Employees can change their preferred shifts
+3. Employees can change their availability 
+4. Employees have a dashboard to see what there preferences are
+
 
 
 

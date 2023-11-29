@@ -4,6 +4,7 @@ import Header from '../Components/Header.jsx';
 import Schedule from '../Components/Schedule.jsx';
 
 function Home() {
+
   return (
     <div>
         <section class="vh-100 gradient-custom">
