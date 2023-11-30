@@ -40,19 +40,19 @@ function EditOffDays() {
         .map((day) => {
             switch (day) {
             case 'Monday':
-                return 1;
+                return 0;
             case 'Tuesday':
-                return 2;
+                return 1;
             case 'Wednesday':
-                return 3;
+                return 2;
             case 'Thursday':
-                return 4;
+                return 3;
             case 'Friday':
-                return 5;
+                return 4;
             case 'Saturday':
-                return 6;
+                return 5;
             case 'Sunday':
-                return 7;
+                return 6;
             default:
                 return -1; // Handle unknown days
             }
