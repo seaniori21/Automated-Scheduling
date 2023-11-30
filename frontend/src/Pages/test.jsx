@@ -104,7 +104,7 @@ const Test = () => {
             </div>
 
             <div>
-                  <button class="btn btn-outline-light btn-xs px-5" onClick={displayEditShifts}>Get Shift Names</button>
+                  <button class="btn btn-outline-light btn-xs px-5" onClick={displayEditShifts}>Change Shift Preferences</button>
             </div>
 
             <hr />
