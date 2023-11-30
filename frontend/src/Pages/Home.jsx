@@ -1,15 +1,16 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 //import Header from 'C:/Users/seani/OneDrive/Documents/FALL 2023/Senior Design/Automated Scheduling/frontend/src/Components/NavBar.jsx';
 import Header from '../Components/Header.jsx';
 import Schedule from '../Components/Schedule.jsx';
 
 function Home() {
-
+ 
   return (
     <div>
         <section class="vh-100 gradient-custom">
     <header>
-        <h1>Weekly Schedule</h1>
+        <h1 className='HomeTitle'>Weekly Schedule</h1>
         <div className="container px-5">
             <div className="row gx-5 justify-content-center">
                 <div className="col-lg-6">

@@ -89,17 +89,17 @@ const Test = () => {
           <div class="card-body p-5 text-center">
 
             <div class="pb-3">
-            <h1 class="fw-bold mb-2 text-uppercase">Profile</h1>
+            <h1 class="Profile">Profile</h1>
             </div>
 
             <div class="mb-md-5 mt-md-4 pb-1">
-                <h4 class="fw-bold mb-2 ">Employee ID Number: {data.ID}</h4> 
-                <h4 class="fw-bold mb-2 text-uppercase">Name: {data.Name}</h4>
+                <h4 class="Profile ">Employee ID Number: {data.ID}</h4> 
+                <h4 class="Profile">Name: {data.Name}</h4>
             </div>
 
 
             <div class="mb-md-1 mt-md-1 pb-1">
-            <h4 class="fw-bold mb-2 text-uppercase">Shift Preferences</h4>
+            <h4 class="Profile">Shift Preferences</h4>
               {content}
             </div>
 
