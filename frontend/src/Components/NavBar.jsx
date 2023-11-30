@@ -1,7 +1,6 @@
 import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import useToken from './useToken';
 import { useAuth ,logout} from './Auth'
 
 
@@ -16,7 +15,6 @@ function NavBar(props) {
     })
     .then((response) => {
       navigate("/Header")
-      console.log("YOLOOOOOOO")
       console.log(response); 
       logout();
       props.token()
@@ -32,10 +30,10 @@ function NavBar(props) {
       return (
           <>
               <li className="nav-item">
-                  <a className="nav-link active" href="#" onClick={()=>{logMeOut()}}>Log Out</a>
+                  <a className="nav-link active" aria-current="page" onClick={()=>{logMeOut()}}>Log Out</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/Home">Home</a>
+                <a class="nav-link active" aria-current="page" href="/Home">Schedule</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="/test">Profile</a>
@@ -66,7 +64,6 @@ function NavBar(props) {
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                    {logged?<LoggedInLinks/>:<LoggedOutLinks/>}
-                    {/* <li class="nav-item"><a class="nav-link active" aria-current="page" href="/HomePage">Home</a></li> */}
                 </ul>
             </div>
         </div>

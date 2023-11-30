@@ -1,6 +1,4 @@
 import React from 'react'
-//import Header from 'C:/Users/seani/OneDrive/Documents/FALL 2023/Senior Design/Automated Scheduling/frontend/src/Components/NavBar.jsx';
-import Header from '../Components/Header.jsx';
 import Schedule from '../Components/Schedule.jsx';
 
 function Home() {
