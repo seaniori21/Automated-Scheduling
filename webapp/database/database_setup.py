@@ -21,7 +21,7 @@ def setup_database():
 
     cursor.execute("""     
         ALTER TABLE Employees
-        ADD COLUMN password TEXT NULL;
+        ADD COLUMN email TEXT NULL;
     """)
 
     # Create the Shifts table

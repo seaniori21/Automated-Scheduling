@@ -89,7 +89,6 @@ const Test = () => {
             </div>
 
             <div class="mb-md-5 mt-md-4 pb-1">
-                <h4 class="fw-bold mb-2 ">Employee ID Number: {data.ID}</h4> 
                 <h4 class="fw-bold mb-2 text-uppercase">Name: {data.Name}</h4>
             </div>
 

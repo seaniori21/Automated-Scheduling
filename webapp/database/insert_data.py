@@ -69,6 +69,9 @@ class SchedulingDB:
     def password_employee(self,name, password):
         self.cursor.execute("UPDATE Employees SET password = ? WHERE name = ?", (password, name))
         self.conn.commit()
+    def update_employee_email(self,ID, email):
+        self.cursor.execute("UPDATE Employees SET email = ? WHERE id = ?", (email, ID))
+        self.conn.commit()
     def delete_employee(self, employee_id):
         self.cursor.execute("DELETE FROM Employees WHERE id = ?", (employee_id,))
         self.conn.commit()
@@ -134,6 +137,7 @@ def main():
     # db.new_employee("test1","test1")
     #db.update_seniority(18,1)
     #db.insert_seniority(18,1)
+    db.update_employee_email(1, "Ramon21@gmail.com")
 
     db.close()
 

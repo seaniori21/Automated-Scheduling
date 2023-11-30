@@ -32,7 +32,6 @@ function Login(props) {
           login(response.data.access_token)
           props.setToken(response.data.access_token)
           navigate("/Home")
-          alert("Success")
           
         }
       })
@@ -43,6 +42,7 @@ function Login(props) {
           console.log(error.response.status)
           console.log(error.response.headers)
         }
+        alert("Wrong Authentication")
       });
     }
   }
