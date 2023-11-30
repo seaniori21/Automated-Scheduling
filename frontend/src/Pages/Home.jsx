@@ -2,12 +2,12 @@ import React from 'react'
 import Schedule from '../Components/Schedule.jsx';
 
 function Home() {
-
+ 
   return (
     <div>
         <section class="vh-100 gradient-custom">
     <header>
-        <h1>Weekly Schedule</h1>
+        <h1 className='HomeTitle'>Weekly Schedule</h1>
         <div className="container px-5">
             <div className="row gx-5 justify-content-center">
                 <div className="col-lg-6">
