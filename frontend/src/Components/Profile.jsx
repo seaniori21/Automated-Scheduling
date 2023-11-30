@@ -30,7 +30,7 @@ function Profile(props) {
     <div className="Profile">
 
         <p>To get your profile details: </p><button onClick={getData}>Click me</button>
-        {profileData && <div>
+        {profileData && <div className="profCheck">
               <p>Profile name: {profileData.profile_name}</p>
               <p>About me: {profileData.about_me}</p>
             </div>

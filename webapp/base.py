@@ -182,12 +182,6 @@ def getSched():
     return schedule
     
 
-
-
-
-
-
-
 def main():
     employee_data, shift_data, preferences, seniority, shift_requirements = get_input_data()
     scheduler = Scheduler(employee_data, shift_data, preferences, seniority, shift_requirements)
