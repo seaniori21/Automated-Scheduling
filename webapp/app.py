@@ -187,12 +187,12 @@ def create_token():
     conn = get_db_connection()
 
     cur = conn.cursor()
-    cur.execute("SELECT * FROM Employees WHERE name = ?", (email,))
+    cur.execute("SELECT * FROM Employees WHERE email = ?", (email,))
     user = cur.fetchone()
     conn.close()
 
     print(user[1],user[2])
-    if email != user[1] or password != user[2]:
+    if email != user[3] or password != user[2]:
         return {"msg": "Wrong email or password"}, 401
 
     access_token = create_access_token(identity=user[0])
