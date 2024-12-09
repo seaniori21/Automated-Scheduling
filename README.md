@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Automated Scheduling System is a web application built to help employers automate employee scheduling while considering various constraints like employee availability, preferences, and shift limits. The system leverages **React**, **Flask**, **Redux**, and **Google ORTools** to provide an optimized solution for creating work schedules.
+The Automated Scheduling System is a web application built to help employers automate employee scheduling while considering various constraints like employee availability, preferences, and shift limits
 
 ## Features
 
