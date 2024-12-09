@@ -1,18 +1,67 @@
-Automated Scheduling
+# Automated Scheduling System
 
-HOW TO RUN:
-1. TO GET ALL MODULES GO INTO WEBAPP DIRECTORY THEN RUN pip install -r requirements.txt
-2. THEN RUN THE BACKEND FLASK BY RUNNING APP.PY
-3. OPEN ANOTHER TERMINAL, GO TO FRONTEND DIRECTORY
-4. TO GET IMPORTS FOR FRONT END IN THE TERMINAL PUT npm run install
-5. IN THE TERMINAL RUN npm run start 
+## Overview
 
-User Stories:
-1. Ability to sign up and login for Employees
-2. Employees can change their preferred shifts
-3. Employees can change their availability 
-4. Employees have a dashboard to see what there preferences are
+The Automated Scheduling System is a web application built to help employers automate employee scheduling while considering various constraints like employee availability, preferences, and shift limits. The system leverages **React**, **Flask**, **Redux**, and **Google ORTools** to provide an optimized solution for creating work schedules.
 
+## Features
+
+- **Employee Management**: Add, edit, and remove employee details.
+- **Shift Preferences**: Employees can specify their availability and shift preferences.
+- **Automated Scheduling**: Automatically generates optimized schedules based on employee availability and preferences.
+- **Real-Time Updates**: Changes to employee availability or shift assignments are reflected immediately in the schedule.
+- **User Authentication**: Secure login and access to user-specific schedules.
+- **Responsive UI**: Fully responsive design for both desktop and mobile devices.
+
+## Technologies Used
+
+- **Frontend**: 
+  - React
+  - Tailwind CSS
+- **Backend**: 
+  - Flask (Python)
+- **Database**:
+  - SQLite
+  
+## Setup & Installation
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- Python (v3.6)
+
+### Steps
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/your-username/automated-scheduling.git
+   cd automated-scheduling
+   ```
+2. **Install frontend dependencies:**:
+   ```bash
+   cd frontend
+    npm install
+   ```
+3. **Install backend dependencies:**:
+   ```bash
+   cd backend
+   pip install -r requirements.txt
+   ```
+4. **Setup Database:**:
+   ```bash
+   cd database
+   python database_setup.py
+   python insert_data.py
+   ```
+5. **Run the development server:**:
+   ```bash
+   cd frontend
+   npm start
+   ```
+   ```bash
+   cd backend
+   python app.py
+   ```
 
 
 
